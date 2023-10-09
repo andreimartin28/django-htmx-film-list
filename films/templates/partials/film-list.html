@@ -1,31 +1,37 @@
 <div class="d-flex justify-content-between">
 
-    <section class="col-6">
-    {% if films %}
+<section class="col-6">
 
-  
-        <ul class="list-group col-4">
-            {% for film in films %}
-                <li class="list-group-items d-flex justify-content-between align-items-center">
-                    {{ film.name }}
-                    <span class="badge badge-danger badge-pill"
-                    style="cursor: pointer;"
-                    hx-delete="{% url 'delete-film' film.pk %}"
-                    hx-target="#film-list"
-                    hx-confirm="Are you sure you wish to delete?">X</span>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>You do not have any films in your list</p>
-    {% endif %} 
+{% if messages %}
+<ul class="messages" hx-get="{% url 'clear' %}" hx-trigger="load delay:3s">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
-            
-    </section>
+{% if films %}
 
-    <section>
-        {% include "partials/search.html" %}
-    </section>
+    {% csrf_token %}
+    <ul class="list-group col-12">
+    {% for film in films %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ film.name }}
+            <span class="badge badge-danger badge-pill"
+                style="cursor: pointer;"
+                hx-delete="{% url 'delete-film' film.pk %}"
+                hx-target="#film-list"
+                hx-confirm="Are you sure you wish to delete?">X</span>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>You do not have any films in your list</p>
+{% endif %} 
+</section>
 
+<section>
+    {% include "partials/search.html" %}
+</section>
 </div>
     
